@@ -31,17 +31,17 @@ impl Crypto {
 
     pub fn parse(&self, res: String) -> serde_json::Result<String> {
         let resp: Response = serde_json::from_str(&res)?;
-        let mut ret: String = String::new();
+
+        let mut table = Table::new();
+        table.add_row(row!["Name", "Symbol", "Price $USD"]);
 
         for data in resp.data {
-            ret.push_str(
-                format!(
-                    "{} - {} - ${:.2}\n",
-                    data.slug, data.symbol, data.metrics.market_data.price_usd
-                )
-                .as_str(),
-            )
+            table.add_row(row![
+                data.slug.to_uppercase(),
+                data.symbol,
+                format!("${:.2}", data.metrics.market_data.price_usd)
+            ]);
         }
-        Ok(ret)
+        Ok(table.to_string())
     }
 }

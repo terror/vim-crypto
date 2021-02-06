@@ -5,6 +5,8 @@ mod messages;
 mod request;
 
 use crate::common::*;
+#[macro_use]
+extern crate prettytable;
 
 fn main() {
     let mut event_handler = EventHandler::new();

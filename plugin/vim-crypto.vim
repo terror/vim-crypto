@@ -3,7 +3,7 @@ if !exists('s:cryptoJobId')
 endif
 
 let s:scriptdir = resolve(expand('<sfile>:p:h') . '/..')
-let s:bin = s:scriptdir . '/target/debug/vim-crypto'
+let s:bin = s:scriptdir . '/target/release/vim-crypto'
 
 " Constants for RPC messages.
 let s:Crypto = 'crypto'
