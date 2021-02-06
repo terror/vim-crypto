@@ -28,7 +28,7 @@ impl EventHandler {
                     };
 
                     self.nvim
-                        .command(&format!("echo {:?}", self.crypto.parse(res)))
+                        .command(&format!("echo {:?}", self.crypto.parse(res).unwrap()))
                         .unwrap()
                 }
                 Messages::Unknown(event) => {

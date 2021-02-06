@@ -2,12 +2,46 @@ use crate::common::*;
 
 pub struct Crypto;
 
+#[derive(Deserialize)]
+struct Response {
+    data: Vec<Data>,
+}
+
+#[derive(Deserialize)]
+struct Data {
+    slug: String,
+    symbol: String,
+    metrics: Metrics,
+}
+
+#[derive(Deserialize)]
+struct Metrics {
+    market_data: MarketData,
+}
+
+#[derive(Deserialize)]
+struct MarketData {
+    price_usd: f64,
+}
+
 impl Crypto {
     pub fn new() -> Crypto {
         Crypto {}
     }
 
-    pub fn parse(&self, res: String) -> String {
-        res
+    pub fn parse(&self, res: String) -> serde_json::Result<String> {
+        let resp: Response = serde_json::from_str(&res)?;
+        let mut ret: String = String::new();
+
+        for data in resp.data {
+            ret.push_str(
+                format!(
+                    "{} - {} - ${:.2}\n",
+                    data.slug, data.symbol, data.metrics.market_data.price_usd
+                )
+                .as_str(),
+            )
+        }
+        Ok(ret)
     }
 }
