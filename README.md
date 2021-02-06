@@ -2,7 +2,7 @@
 
 View live crypto currency information without leaving vim!
 
-![](img/vim-crypto.png)
+![](demo/vim-crypto.gif)
 
 ## Installation
 
