@@ -6,8 +6,8 @@ View live crypto currency information without leaving vim!
 
 ## Installation
 
-You can install this plugin using vim-plug
+You can install this plugin using vim plug
 
-```
-Plug terror/vim-crypto
+```vim
+Plug 'terror/vim-crypto', { 'do': 'cargo build --release' }
 ```
