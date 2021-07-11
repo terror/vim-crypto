@@ -6,6 +6,7 @@ mod crypto;
 mod error;
 mod event;
 mod messages;
+mod table;
 
 #[macro_use]
 extern crate prettytable;

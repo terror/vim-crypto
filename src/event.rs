@@ -2,7 +2,7 @@ use crate::common::*;
 
 pub struct EventHandler {
   pub nvim: Neovim,
-  client: Client,
+  client:   Client,
 }
 
 impl EventHandler {

@@ -45,19 +45,9 @@ impl Crypto {
     let resp: ResponseTop = serde_json::from_str(&res).context(error::ParseError)?;
 
     let mut table = Table::new();
-    table.set_format(*format::consts::FORMAT_BOX_CHARS);
-
-    table.add_row(row![
-      "Name",
-      "Symbol",
-      "Price $USD",
-      "Price $BTC",
-      "Change (24h)",
-      "Volume (24h)",
-    ]);
 
     for data in resp.data {
-      table.add_row(row![
+      table.add_row(vec![
         data.slug.to_uppercase(),
         data.symbol,
         format!("${:.2}", data.metrics.market_data.price_usd),
@@ -77,18 +67,8 @@ impl Crypto {
     let resp: ResponseOne = serde_json::from_str(&res).context(error::ParseError)?;
 
     let mut table = Table::new();
-    table.set_format(*format::consts::FORMAT_BOX_CHARS);
 
-    table.add_row(row![
-      "Name",
-      "Symbol",
-      "Price $USD",
-      "Price $BTC",
-      "Change (24h)",
-      "Volume (24h)",
-    ]);
-
-    table.add_row(row![
+    table.add_row(vec![
       resp.data.slug.to_uppercase(),
       resp.data.symbol,
       format!("${:.2}", resp.data.market_data.price_usd),
