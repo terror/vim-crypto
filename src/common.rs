@@ -1,13 +1,19 @@
-// std
-pub(crate) use std::error;
+// stdlib
 
 // dependencies
-pub(crate) use chrono::NaiveDateTime;
-pub(crate) use neovim_lib::{Neovim, NeovimApi, Session};
-pub(crate) use prettytable::Table;
-pub(crate) use reqwest;
-pub(crate) use serde::Deserialize;
-pub(crate) use serde_json;
+pub(crate) use {
+  neovim_lib::{self, Neovim, NeovimApi, Session},
+  prettytable::{format, Table},
+  reqwest::{self, blocking},
+  serde::Deserialize,
+  serde_json,
+  snafu::{ResultExt, Snafu},
+};
 
 // modules
-pub(crate) use crate::{crypto::Crypto, event::EventHandler, messages::Messages, request};
+pub(crate) use crate::error;
+
+// structs and enums
+pub(crate) use crate::{
+  client::Client, crypto::Crypto, error::Error, event::EventHandler, messages::Messages,
+};

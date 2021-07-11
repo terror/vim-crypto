@@ -1,44 +1,57 @@
 use crate::common::*;
 
 pub struct EventHandler {
-  nvim:   Neovim,
-  crypto: Crypto,
+  pub nvim: Neovim,
+  client: Client,
 }
 
 impl EventHandler {
   pub fn new() -> EventHandler {
     let mut session = Session::new_parent().unwrap();
     session.set_infinity_timeout();
+
     let nvim = Neovim::new(session);
-    let crypto = Crypto::new();
-    EventHandler { nvim, crypto }
+    let client = Client::new();
+
+    EventHandler { nvim, client }
   }
 
-  pub fn recv(&mut self) {
+  pub fn recv(&mut self) -> Result<(), Error> {
     let rec = self.nvim.session.start_event_loop_channel();
 
-    for (event, _) in rec {
+    for (event, values) in rec {
       match Messages::from(event) {
-        Messages::Crypto => {
-          let res = request::fetch();
-
-          let res = match res {
-            Ok(s) => s,
-            Err(err) => err.to_string(),
-          };
-
+        Messages::CryptoTop => {
           self
             .nvim
-            .command(&format!("echo {:?}", self.crypto.parse(res).unwrap()))
-            .unwrap()
-        },
+            .command(&format!(
+              "echo {:?}",
+              Crypto::parse_top(self.client.get()?)?
+            ))
+            .context(error::NeovimError)?;
+        }
+
+        Messages::Crypto => {
+          if let Some(symbol) = values.get(0) {
+            self
+              .nvim
+              .command(&format!(
+                "echo {:?}",
+                Crypto::parse_one(self.client.get_one(&symbol.as_str().unwrap())?)?
+              ))
+              .context(error::NeovimError)?;
+          }
+        }
+
         Messages::Unknown(event) => {
           self
             .nvim
             .command(&format!("echo \"Unknown command: {}\"", event))
-            .unwrap();
-        },
+            .context(error::NeovimError)?;
+        }
       }
     }
+
+    Ok(())
   }
 }

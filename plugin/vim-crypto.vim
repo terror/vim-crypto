@@ -1,25 +1,26 @@
 if !exists('s:cryptoJobId')
-    let s:cryptoJobId = 0
+  let s:cryptoJobId = 0
 endif
 
 let s:scriptdir = resolve(expand('<sfile>:p:h') . '/..')
-let s:bin = s:scriptdir . '/target/release/vim-crypto'
+let s:bin       = s:scriptdir . '/target/release/vim-crypto'
 
 " Constants for RPC messages.
-let s:Crypto = 'crypto'
+let s:Crypto    = 'Crypto'
+let s:CryptoTop = 'CryptoTop'
 
-" Entry point. Initialize RPC. If it succeeds, then attach commands to the `rpcnotify` invocations
+" Entry point. Initialize RPC.
+" If it succeeds, then attach commands to the `rpcnotify` invocations.
 function! s:connect()
-    let id = s:initRpc()
-
-    if 0 == id
-        echoerr "crypto: cannot start rpc process"
-    elseif -1 == id
-        echoerr "crypto: rpc process is not executable"
-    else
-        let s:cryptoJobId = id
-        call s:configureCommands()
-    endif
+  let id = s:initRpc()
+  if 0 == id
+    echoerr "Crypto: cannot start rpc process"
+  elseif -1 == id
+    echoerr "Crypto: rpc process is not executable"
+  else
+    let s:cryptoJobId = id
+    call s:configureCommands()
+  endif
 endfunction
 
 " Initialize RPC and return Job ID
@@ -34,7 +35,12 @@ endfunction
 
 " Commands -> RPC
 function! s:configureCommands()
-  command! -nargs=0 Crypto :call s:rpc(s:Crypto)
+  command! -nargs=1 Crypto    :call s:crypto(<f-args>)
+  command! -nargs=0 CryptoTop :call s:rpc(s:CryptoTop)
+endfunction
+
+function! s:crypto(symbol)
+  call rpcnotify(s:cryptoJobId, s:Crypto, a:symbol)
 endfunction
 
 " RPC Msg -> Remote Process
