@@ -7,7 +7,6 @@ pub(crate) use {
   prettytable::{format, Cell, Row, Table as PrettyTable},
   reqwest::{self, blocking},
   serde::Deserialize,
-  serde_json,
   snafu::{ResultExt, Snafu},
 };
 

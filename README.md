@@ -1,5 +1,7 @@
 ## vim-crypto
 
+[![Build](https://github.com/terror/zk/actions/workflows/build.yaml/badge.svg?branch=master)](https://github.com/terror/vim-crypto/actions/workflows/build.yaml)
+
 View live crypto currency information without leaving vim! (Note: Supports Neovim only)
 
 ### Demo
